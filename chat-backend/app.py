@@ -65,9 +65,9 @@ def hello_world():  # put application's code here
 def getmsg():
     if request.method == 'POST':
         global MESSAGES, IS_INIT
-        MESSAGES = []
         chatgpt = ChatGPTAPI()
         if request.args.get('isinit') == "false":
+            MESSAGES = []
             print("init")
             msg = None
             print('level:' + request.args.get('level'))
