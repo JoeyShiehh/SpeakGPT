@@ -5,7 +5,7 @@
 
 可以进行IELTS口语仿真考试
 
-![](https://s3.bmp.ovh/imgs/2023/05/29/d788e7a67ed21ee6.png)
+![](https://s3.bmp.ovh/imgs/2023/05/29/a6f56c982743d7ce.png)
 
 # Frames
 开发框架基于
@@ -16,6 +16,7 @@
 产品赋能基于
 - ChatGPT
 - 百度TTS
+- 讯飞语音评判
 
 # Collaborator
 [@1vyyyyyy](https://github.com/1vyyyyyy)

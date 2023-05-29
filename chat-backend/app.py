@@ -67,7 +67,6 @@ def getmsg():
     if request.method == 'POST':
         global MESSAGES, IS_INIT
         chatgpt = ChatGPTAPI()
-        score = {}
         if request.args.get('isinit') == "false":
             MESSAGES = []
             print("init")
@@ -84,22 +83,34 @@ def getmsg():
                                  "content": IELTSContent})
             print(MESSAGES[0])
         else:
-            print("second")
-            user_wav = request.files['file']
-            user_wav.save('static/' + user_wav.filename)
-            msg = recogwav(user_wav.filename)
-            print("msg: " + msg)
-            MESSAGES.append({"role": "user", "content": msg})
-            score = speechscore('static/' + user_wav.filename, msg)
-            print(score)
+            data = request.data
+            jData = json.loads(data)
+            uMsg = jData['userMsg']
+            print("msg: " + uMsg)
+            MESSAGES.append({"role": "user", "content": uMsg})
         MESSAGES, completion = chatgpt.chat(MESSAGES)
         gpt_res = completion.choices[0].message.content
         audio_res = speechtts(gpt_res).decode()
         res = make_response('', 200, )
-        res.data = json.dumps({'response': gpt_res, 'audio': audio_res, 'userMsg': msg, 'score': score})
+        res.data = json.dumps({'response': gpt_res, 'audio': audio_res})
         return res
     return make_response('', 402, )
 
+
+@app.route('/getmsgreco', methods=['GET', 'POST'])
+def getmsgreco():
+    if request.method == 'POST':
+        if request.args.get('isinit') == "true":
+            print("wav recognizing...")
+            user_wav = request.files['file']
+            user_wav.save('static/' + user_wav.filename)
+            msg = recogwav(user_wav.filename)
+            print("msg: " + msg)
+            score = speechscore('static/' + user_wav.filename, msg)
+            res = make_response('', 200, )
+            res.data = json.dumps({'userMsg': msg, 'score': score})
+            return res
+    return make_response('', 402, )
 
 
 if __name__ == '__main__':

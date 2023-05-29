@@ -154,7 +154,7 @@ export default {
       //   console.log('语音打印', stream)
       //   this.sendMessage(stream)
       // })
-      this.sendMessage(blob)
+      this.sendVoiceMessage(blob)
     },
     blobToBase64 (blob) {
       return new Promise((resolve, reject) => {
@@ -173,9 +173,8 @@ export default {
       this.isInit = false
       this.sendMessage(1)
     },
-    sendMessage (blobdata) {
-      const url = `${baseApiUrl}/getmsg?isinit=` + this.isInit + '&level=' + this.activeIndex
-      this.isInit = true
+    sendVoiceMessage (blobdata) {
+      const url = `${baseApiUrl}/getmsgreco?isinit=` + this.isInit
       const blob = new Blob([blobdata], { type: 'application/octet-stream' })
       const formData = new FormData()
       formData.append('file', blob, 'user.wav')
@@ -188,12 +187,6 @@ export default {
         // console.log('登录信息:', response.data.token)
         if (response.status === 200) {
           console.log(response.data.response)
-          const res = {
-            content: response.data.response,
-            time: new Date().toLocaleTimeString(),
-            isUserMessage: false,
-            audio: response.data.audio
-          }
           if (isNaN(response.data.userMsg)) {
             const usrRes = {
               content: response.data.userMsg,
@@ -209,12 +202,8 @@ export default {
               }
             }
             this.messages.push(usrRes)
+            this.sendMessage(usrRes.content)
           }
-          this.messages.push(res)
-          const audioBlob = this.base64ToBlob(res.audio)
-          const wav = document.getElementById('wav')
-          wav.src = window.URL.createObjectURL(audioBlob)
-          this.isLoading = false
         } else if (response.status === 402) {
           this.$message.error('请输入您的问题')
         }
@@ -222,6 +211,38 @@ export default {
         this.$message.error('请输入您的问题')
       })
       this.inputMessage = ''
+    },
+    sendMessage (msg) {
+      const url = `${baseApiUrl}/getmsg?isinit=` + this.isInit + '&level=' + this.activeIndex
+      this.isInit = true
+      const data = {
+        userMsg: msg
+      }
+      axios.post(url, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(response => {
+        // console.log('登录信息:', response.data.token)
+        if (response.status === 200) {
+          console.log(response.data.response)
+          const res = {
+            content: response.data.response,
+            time: new Date().toLocaleTimeString(),
+            isUserMessage: false,
+            audio: response.data.audio
+          }
+          this.messages.push(res)
+          const audioBlob = this.base64ToBlob(res.audio)
+          const wav = document.getElementById('wav')
+          wav.src = window.URL.createObjectURL(audioBlob)
+        } else if (response.status === 402) {
+          this.$message.error('请输入您的问题')
+        }
+      }).catch(() => {
+        this.$message.error('请输入您的问题')
+      })
+      this.isLoading = false
     },
     base64ToBlob (base64) {
       const typeHeader = 'data:application/wav' + ';base64,' // 定义base64 头部文件类型
