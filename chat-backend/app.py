@@ -5,6 +5,7 @@ from flask import Flask, request, make_response
 from flask_cors import CORS
 from chatAPIs.gptAPI import ChatGPTAPI
 from chatAPIs.speechAPI import recogwav, speechtts
+from chatAPIs.xfscoreAPI import speechscore
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -66,6 +67,7 @@ def getmsg():
     if request.method == 'POST':
         global MESSAGES, IS_INIT
         chatgpt = ChatGPTAPI()
+        score = {}
         if request.args.get('isinit') == "false":
             MESSAGES = []
             print("init")
@@ -88,11 +90,13 @@ def getmsg():
             msg = recogwav(user_wav.filename)
             print("msg: " + msg)
             MESSAGES.append({"role": "user", "content": msg})
+            score = speechscore('static/' + user_wav.filename, msg)
+            print(score)
         MESSAGES, completion = chatgpt.chat(MESSAGES)
         gpt_res = completion.choices[0].message.content
         audio_res = speechtts(gpt_res).decode()
         res = make_response('', 200, )
-        res.data = json.dumps({'response': gpt_res, 'audio': audio_res, 'userMsg': msg})
+        res.data = json.dumps({'response': gpt_res, 'audio': audio_res, 'userMsg': msg, 'score': score})
         return res
     return make_response('', 402, )
 
