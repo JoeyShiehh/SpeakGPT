@@ -34,7 +34,16 @@
           :class="{ 'user-message': message.isUserMessage, 'bot-message': !message.isUserMessage }">
           <svg v-if="message.isUserMessage" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 30C4 36.6274 9.37258 42 16 42C22.6274 42 26 38 27 35L28.5385 30L35 9L44 42" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M40.7274 30H28.5386" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 15C22 11.6863 19.3137 9 16 9C12.6863 9 10 11.6863 10 15V30C10 33.3137 12.6863 36 16 36C19.3137 36 22 33.3137 22 30V15Z" fill="none" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <svg v-if="!message.isUserMessage" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="18" width="30" height="24" rx="2" fill="none" stroke="#333" stroke-width="4"/><circle cx="17" cy="26" r="2" fill="#333"/><circle cx="31" cy="26" r="2" fill="#333"/><path d="M20 32C18.8954 32 18 32.8954 18 34C18 35.1046 18.8954 36 20 36V32ZM28 36C29.1046 36 30 35.1046 30 34C30 32.8954 29.1046 32 28 32V36ZM20 36H28V32H20V36Z" fill="#333"/><path d="M24 10V18" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 26V34" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M44 26V34" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="8" r="2" stroke="#333" stroke-width="4"/></svg>
-          <div class="message-content">{{ message.content }}<pre>{{ message.score }}</pre></div>
+          <div class="message-content">{{ message.content }}</div>
+          <div class="flex flex-row" v-if="message.isUserMessage">
+            <div v-for="(value,key) in message.score" :key="key|index" >
+              {{ key }}
+              <a :style="'color:'+(value > 3?'green':'red')+';'">
+                {{ value }}
+              </a>
+              {{ '|\xa0' }}
+            </div>
+          </div>
           <div class="message-time">{{ message.time }}</div>
           <!-- <div v-if="!message.isUserMessage" class="message-time font-bold">{{ sidebarItems[activeIndex] }}</div> -->
         </div>
@@ -190,11 +199,14 @@ export default {
               content: response.data.userMsg,
               time: new Date().toLocaleTimeString(),
               isUserMessage: true,
-              score: '1.词汇精确度:' + response.data.score.accuracy_score + '\r\n' +
-                       '2.语言流畅度:' + response.data.score.fluency_score + '\n' +
-                       '3.语句完整度:' + response.data.score.integrity_score + '\n' +
-                       '4.发音标准度:' + response.data.score.standard_score + '\n' +
-                       '5.综合评分:' + response.data.score.total_score + '\n'
+              score:
+              {
+                '词汇精确度:': parseFloat(response.data.score.accuracy_score),
+                '语言流畅度:': parseFloat(response.data.score.fluency_score),
+                '语句完整度:': parseFloat(response.data.score.integrity_score),
+                '发音标准度:': parseFloat(response.data.score.standard_score),
+                '综合评分:': parseFloat(response.data.score.total_score)
+              }
             }
             this.messages.push(usrRes)
           }

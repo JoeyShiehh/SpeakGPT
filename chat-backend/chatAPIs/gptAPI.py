@@ -9,7 +9,7 @@ class ChatGPTAPI(object):
     def __init__(self):
         load_dotenv()
         openai.api_key = os.getenv("OPENAI_API_KEY")
-        openai.proxy = "http://127.0.0.1:33210"
+        openai.proxy = "http://127.0.0.1:7890"
 
     def chat(self, message):
         try:

@@ -22,8 +22,8 @@ STATUS_LAST_FRAME = 2  # 最后一帧的标识
 #  BusinessArgs参数常量
 SUB = "ise"
 ENT = "en_vip"
-#中文题型：read_syllable（单字朗读，汉语专有）read_word（词语朗读）read_sentence（句子朗读）read_chapter(篇章朗读)
-#英文题型：read_word（词语朗读）read_sentence（句子朗读）read_chapter(篇章朗读)simple_expression（英文情景反应）read_choice（英文选择题）topic（英文自由题）retell（英文复述题）picture_talk（英文看图说话）oral_translation（英文口头翻译）
+# 中文题型：read_syllable（单字朗读，汉语专有）read_word（词语朗读）read_sentence（句子朗读）read_chapter(篇章朗读)
+# 英文题型：read_word（词语朗读）read_sentence（句子朗读）read_chapter(篇章朗读)simple_expression（英文情景反应）read_choice（英文选择题）topic（英文自由题）retell（英文复述题）picture_talk（英文看图说话）oral_translation（英文口头翻译）
 CATEGORY = "read_sentence"
 
 APPID = os.getenv('XF_APP_ID')
@@ -85,8 +85,8 @@ class Ws_Param(object):
 
 
 wsParam = Ws_Param(APPID=APPID, APISecret=APISECRET,
-                       APIKey=APISECRET,
-                       AudioFile='', Text='')
+                   APIKey=APISECRET,
+                   AudioFile='', Text='')
 
 
 # 收到websocket消息的处理
@@ -105,7 +105,7 @@ def on_message(ws, message):
             result = data["data"]
             if (status == 2):
                 xml = base64.b64decode(result).decode("gbk")
-                #python在windows上默认用gbk编码，print时需要做编码转换，mac等其他系统自行调整编码
+                # python在windows上默认用gbk编码，print时需要做编码转换，mac等其他系统自行调整编码
                 root = ET.fromstring(xml)
                 read_chapter = root.find('.//read_chapter')
                 accuracy_score = read_chapter.get('accuracy_score')
@@ -113,8 +113,11 @@ def on_message(ws, message):
                 integrity_score = read_chapter.get('integrity_score')
                 standard_score = read_chapter.get('standard_score')
                 total_score = read_chapter.get('total_score')
-                SCORES = {'accuracy_score': accuracy_score, 'fluency_score': fluency_score, 'integrity_score': integrity_score,
-                          'standard_score': standard_score, 'total_score': total_score}
+                SCORES = {'accuracy_score': accuracy_score[:5],
+                          'fluency_score': fluency_score[:5],
+                          'integrity_score': integrity_score[:5],
+                          'standard_score': standard_score[:5],
+                          'total_score': total_score[:5]}
 
     except Exception as e:
         print("receive msg,but parse exception:", e)
