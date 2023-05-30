@@ -5,7 +5,7 @@
 
 可以进行IELTS口语仿真考试
 
-![](https://s3.bmp.ovh/imgs/2023/05/29/a6f56c982743d7ce.png)
+![](https://s3.bmp.ovh/imgs/2023/05/30/5b99fa6b11d6dc3e.png)
 
 # Frames
 开发框架基于
