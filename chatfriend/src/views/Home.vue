@@ -2,7 +2,7 @@
   <div class="flex h-screen">
     <aside class="default-sidebar bg-gray-50 dark:bg-gray-800">
       <div class="sidebar-header">
-        <p class="m-10 text-4xl font-extrabold text-gray-900 dark:text-white">Chat Friend</p>
+        <p class="m-10 text-4xl font-extrabold text-gray-900 dark:text-white">Speak GPT</p>
       </div>
       <div class="px-3 py-4 overflow-y-auto">
         <ul class="sidebar-menu">
@@ -15,7 +15,8 @@
         </ul>
       </div>
       <div class="text-sm text-gray-500 text-center">
-        Powered by <a class="underline" href="https://openai.com/blog/chatgpt"> ChatGPT</a>
+        Powered by <a class="underline" href="https://openai.com/blog/chatgpt"> ChatGPT</a><br><br>
+        <a class="underline" href="https://github.com/JoeyShiehh/SpeakGPT"> About project</a>
       </div>
     </aside>
     <div class="h-screen flex flex-col">
