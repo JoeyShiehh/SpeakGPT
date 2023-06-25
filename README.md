@@ -35,10 +35,11 @@ SECRET_KEY = "xxx" # 百度云控制台获取
 ```
 ## 后端启动
 入口文件```/back-end/app.py```
-**请确保包含所需所有依赖库**
+
+**请确保包含所有需要的依赖库**
 
 ## Vue启动
-在```/chatfriend```下执行以下命令
+在```/chatfriend```文件夹下执行以下命令
 ```
 npm install
 npm run serve
