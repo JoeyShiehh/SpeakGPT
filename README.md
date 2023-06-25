@@ -18,5 +18,31 @@
 - 百度TTS
 - 讯飞语音评判
 
+# Usage
+## 环境（仅供参考）
+- Nodejs 14.17.1
+- Python 3.10
+## API key配置
+需要在```/back-end```文件夹下新建```.env```文件，文件内需要包含以下信息：
+```
+OPENAI_API_KEY = 'sk-xxx' # 你的OPENAI Key
+FLASK_KEY = 'xxx'
+XF_APP_ID = 'xxx' # 讯飞云控制台获取
+XF_API_SECRET = 'xxx' # 讯飞云控制台获取
+XF_API_KEY = 'xxx' # 讯飞云控制台获取
+API_KEY = "xxx" # 百度云控制台获取
+SECRET_KEY = "xxx" # 百度云控制台获取
+```
+## 后端启动
+入口文件```/back-end/app.py```
+**请确保包含所需所有依赖库**
+
+## Vue启动
+在```/chatfriend```下执行以下命令
+```
+npm install
+npm run serve
+```
+
 # Collaborator
 [@1vyyyyyy](https://github.com/1vyyyyyy)
